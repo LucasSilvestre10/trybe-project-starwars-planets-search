@@ -7,17 +7,33 @@ export const FilterContext = createContext();
 
 function FilterProvider({ children }) {
   const { planets } = useContext(PlanetsContext);
-  const { filterByName } = useFilter();
+  const { filterByName, filterByNumbers } = useFilter();
   const [search, setSearch] = useState('');
   const [filteredPlanets, setFilterPlanets] = useState([]);
+  const [filterNumbers, setFilterNumbers] = useState({
+    column: 'population',
+    comparison: 'maior que',
+    valueFilter: '0',
+  });
 
   useEffect(() => {
     setFilterPlanets(filterByName(planets, search));
   }, [search, planets]);
 
+  function clickFilter() {
+    setFilterPlanets(filterByNumbers(filterNumbers, filteredPlanets));
+  }
+
+  function handleChange({ target: { name, value } }) {
+    setFilterNumbers({
+      ...filterNumbers,
+      [name]: value,
+    });
+  }
+
   const values = useMemo(() => ({
-    setSearch, search, filteredPlanets,
-  }), [search, filteredPlanets]);
+    setSearch, search, filteredPlanets, filterNumbers, handleChange, clickFilter,
+  }), [search, filteredPlanets, filterNumbers]);
 
   return (
     <FilterContext.Provider value={ values }>

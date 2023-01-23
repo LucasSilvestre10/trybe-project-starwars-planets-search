@@ -2,18 +2,62 @@ import React, { useContext } from 'react';
 import { FilterContext } from '../context/FilterProvider';
 
 function Table() {
-  const { search, setSearch, filteredPlanets } = useContext(FilterContext);
+  const {
+    search,
+    setSearch,
+    filteredPlanets,
+    filterNumbers: { valueFilter },
+    handleChange,
+    clickFilter,
+  } = useContext(FilterContext);
 
   return (
-    <main>
-      <div>
-        <input
-          type="text"
-          onChange={ ({ target }) => setSearch(target.value) }
-          value={ search }
-          data-testid="name-filter"
-        />
-      </div>
+    <>
+      <input
+        id="input-filter-name"
+        type="text"
+        onChange={ ({ target }) => setSearch(target.value) }
+        value={ search }
+        data-testid="name-filter"
+      />
+      <select
+        id="select-column-filter"
+        name="column"
+        onChange={ handleChange }
+        data-testid="column-filter"
+      >
+        <option value="population">population</option>
+        <option value="orbital_period">orbital_period</option>
+        <option value="diameter">diameter</option>
+        <option value="rotation_period">rotation_period</option>
+        <option value="surface_water">surface_water</option>
+      </select>
+      <select
+        id="select-column-filter"
+        onChange={ handleChange }
+        name="comparison"
+        data-testid="comparison-filter"
+      >
+        <option value="maior que">maior que</option>
+        <option value="menor que">menor que</option>
+        <option value="igual a">igual a</option>
+      </select>
+      <input
+        id="input-value-number-filter"
+        name="valueFilter"
+        type="number"
+        value={ valueFilter }
+        onChange={ handleChange }
+        data-testid="value-filter"
+      />
+      <button
+        id="button-filter"
+        onClick={ clickFilter }
+        data-testid="button-filter"
+      >
+        FILTER
+      </button>
+
       <table>
         <thead>
           <tr>
@@ -66,7 +110,8 @@ function Table() {
           ))}
         </tbody>
       </table>
-    </main>
+    </>
+
   );
 }
 
