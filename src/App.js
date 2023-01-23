@@ -2,11 +2,14 @@ import React from 'react';
 import './App.css';
 import Home from './pages/Home';
 import PlanetsProvider from './context/PlanetsProvider';
+import FilterProvider from './context/FilterProvider';
 
 function App() {
   return (
     <PlanetsProvider>
-      <Home />
+      <FilterProvider>
+        <Home />
+      </FilterProvider>
     </PlanetsProvider>
   );
 }

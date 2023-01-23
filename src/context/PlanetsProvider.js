@@ -25,7 +25,7 @@ function PlanetsProvider({ children }) {
 
   const values = useMemo(() => (
     { isLoading, errors, planets }
-  ), [isLoading, errors, planets]);
+  ), [isLoading, errors, planets, setPlanets]);
 
   return (
     <PlanetsContext.Provider value={ values }>
