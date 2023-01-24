@@ -17,6 +17,7 @@ function useFilter() {
     }));
 
   return {
+
     filterByName,
     filterByNumbers,
   };

@@ -6,10 +6,13 @@ function Table() {
     search,
     setSearch,
     filteredPlanets,
-    filterNumbers: { valueFilter },
+    filters: { valueFilter },
     handleChange,
     clickFilter,
     selectFilters,
+    listFilters,
+    deleteFilter,
+    deletAllFilters,
   } = useContext(FilterContext);
 
   return (
@@ -56,6 +59,29 @@ function Table() {
       >
         FILTER
       </button>
+
+      <div>
+        <button
+          onClick={ deletAllFilters }
+          data-testid="button-remove-filters"
+        >
+          REMOVER TODOS OS FILTROS
+        </button>
+        {listFilters.map((filter, index) => (
+          <div key={ index } data-testid="filter">
+            <p>
+              {`${filter.column} ${filter.comparison} ${filter.valueFilter}`}
+            </p>
+            <button
+              id={ index }
+              onClick={ deleteFilter }
+            >
+              REMOVER
+            </button>
+          </div>
+
+        ))}
+      </div>
 
       <table>
         <thead>

@@ -10,11 +10,13 @@ function FilterProvider({ children }) {
   const { filterByName, filterByNumbers } = useFilter();
   const [search, setSearch] = useState('');
   const [filteredPlanets, setFilterPlanets] = useState([]);
-  const [filterNumbers, setFilterNumbers] = useState({
+  const [listFilters, setlistFilters] = useState([]);
+  const [filters, setFilters] = useState({
     column: 'population',
     comparison: 'maior que',
     valueFilter: '0',
   });
+
   const [selectFilters, setSelectFilter] = useState([
     'population',
     'orbital_period',
@@ -28,20 +30,51 @@ function FilterProvider({ children }) {
   }, [search, planets]);
 
   function clickFilter() {
-    setFilterPlanets(filterByNumbers(filterNumbers, filteredPlanets));
+    const id = listFilters.length;
+    filters.id = id;
+    setlistFilters([
+      ...listFilters,
+      filters,
+    ]);
+    setFilterPlanets(filterByNumbers(filters, filteredPlanets));
     setSelectFilter(
-      selectFilters.filter((filter) => filter !== filterNumbers.column),
+      selectFilters.filter((filter) => filter !== filters.column),
+
     );
-    setFilterNumbers({
+    setFilters({
       column: 'population',
       comparison: 'maior que',
       valueFilter: '0',
     });
   }
 
+  function deleteFilter(event) {
+    const array = listFilters.filter((filter) => +filter.id !== +event.target.id);
+
+    setlistFilters(
+      array,
+    );
+    let result = planets;
+    for (let index = 0; index < array.length; index += 1) {
+      result = filterByNumbers(listFilters[index], result);
+      console.log('result', result);
+    }
+    setFilterPlanets(result);
+  }
+
+  function deletAllFilters() {
+    setlistFilters([]);
+    setFilters({
+      column: 'population',
+      comparison: 'maior que',
+      valueFilter: '0',
+    });
+    setFilterPlanets(planets);
+  }
+
   function handleChange({ target: { name, value } }) {
-    setFilterNumbers({
-      ...filterNumbers,
+    setFilters({
+      ...filters,
       [name]: value,
     });
   }
@@ -50,11 +83,14 @@ function FilterProvider({ children }) {
     setSearch,
     search,
     filteredPlanets,
-    filterNumbers,
+    filters,
     handleChange,
     clickFilter,
     selectFilters,
-  }), [search, filteredPlanets, filterNumbers, selectFilters]);
+    listFilters,
+    deleteFilter,
+    deletAllFilters,
+  }), [search, filteredPlanets, filters, selectFilters, listFilters]);
 
   return (
     <FilterContext.Provider value={ values }>
