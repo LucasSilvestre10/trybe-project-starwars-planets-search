@@ -15,6 +15,13 @@ function FilterProvider({ children }) {
     comparison: 'maior que',
     valueFilter: '0',
   });
+  const [selectFilters, setSelectFilter] = useState([
+    'population',
+    'orbital_period',
+    'diameter',
+    'rotation_period',
+    'surface_water',
+  ]);
 
   useEffect(() => {
     setFilterPlanets(filterByName(planets, search));
@@ -22,6 +29,14 @@ function FilterProvider({ children }) {
 
   function clickFilter() {
     setFilterPlanets(filterByNumbers(filterNumbers, filteredPlanets));
+    setSelectFilter(
+      selectFilters.filter((filter) => filter !== filterNumbers.column),
+    );
+    setFilterNumbers({
+      column: 'population',
+      comparison: 'maior que',
+      valueFilter: '0',
+    });
   }
 
   function handleChange({ target: { name, value } }) {
@@ -32,8 +47,14 @@ function FilterProvider({ children }) {
   }
 
   const values = useMemo(() => ({
-    setSearch, search, filteredPlanets, filterNumbers, handleChange, clickFilter,
-  }), [search, filteredPlanets, filterNumbers]);
+    setSearch,
+    search,
+    filteredPlanets,
+    filterNumbers,
+    handleChange,
+    clickFilter,
+    selectFilters,
+  }), [search, filteredPlanets, filterNumbers, selectFilters]);
 
   return (
     <FilterContext.Provider value={ values }>

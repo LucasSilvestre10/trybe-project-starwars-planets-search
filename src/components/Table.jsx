@@ -9,6 +9,7 @@ function Table() {
     filterNumbers: { valueFilter },
     handleChange,
     clickFilter,
+    selectFilters,
   } = useContext(FilterContext);
 
   return (
@@ -26,11 +27,9 @@ function Table() {
         onChange={ handleChange }
         data-testid="column-filter"
       >
-        <option value="population">population</option>
-        <option value="orbital_period">orbital_period</option>
-        <option value="diameter">diameter</option>
-        <option value="rotation_period">rotation_period</option>
-        <option value="surface_water">surface_water</option>
+        {selectFilters.map((filter) => (
+          <option key={ filter } value={ filter }>{filter}</option>
+        ))}
       </select>
       <select
         id="select-column-filter"
