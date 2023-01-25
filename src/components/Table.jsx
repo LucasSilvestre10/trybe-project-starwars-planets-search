@@ -13,6 +13,8 @@ function Table() {
     listFilters,
     deleteFilter,
     deletAllFilters,
+    handleChangeSort,
+    sortPlanets,
   } = useContext(FilterContext);
 
   return (
@@ -59,6 +61,51 @@ function Table() {
       >
         FILTER
       </button>
+      <div>
+        <label htmlFor="select-column-sort">
+          <select
+            id="select-column-sort"
+            name="column"
+            onChange={ handleChangeSort }
+            data-testid="column-sort"
+          >
+            {selectFilters.map((filter) => (
+              <option key={ filter } value={ filter }>{filter}</option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="ASC">
+          <input
+            type="radio"
+            name="ordination"
+            id="ASC"
+            value="ASC"
+            data-testid="column-sort-input-asc"
+            onChange={ handleChangeSort }
+          />
+          Ascendente
+        </label>
+
+        <label htmlFor="DESC">
+          <input
+            type="radio"
+            name="ordination"
+            id="DESC"
+            value="DESC"
+            data-testid="column-sort-input-desc"
+            onChange={ handleChangeSort }
+          />
+          Descendente
+        </label>
+
+        <button
+          onClick={ sortPlanets }
+          data-testid="column-sort-button"
+        >
+          ORDERNAR
+        </button>
+
+      </div>
 
       <div>
         <button
@@ -118,7 +165,7 @@ function Table() {
             url,
           }) => (
             <tr key={ name }>
-              <td>{name}</td>
+              <td data-testid="planet-name">{name}</td>
               <td>{rotationPeriod}</td>
               <td>{orbitalPeriod}</td>
               <td>{diameter}</td>

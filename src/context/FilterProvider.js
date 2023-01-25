@@ -11,6 +11,7 @@ function FilterProvider({ children }) {
   const [search, setSearch] = useState('');
   const [filteredPlanets, setFilterPlanets] = useState([]);
   const [listFilters, setlistFilters] = useState([]);
+  const [sort, setSort] = useState({ column: 'population', ordination: 'ASC' });
   const [filters, setFilters] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -71,6 +72,28 @@ function FilterProvider({ children }) {
     });
     setFilterPlanets(planets);
   }
+  function sortPlanets() {
+    const sortedPlanets = filteredPlanets.sort((planet1, planet2) => {
+      const { column, ordination } = sort;
+      const infinity = ordination === 'ASC' ? Infinity : -Infinity;
+      const number1 = Number(planet1[column]) || infinity;
+      const number2 = Number(planet2[column]) || infinity;
+
+      return ordination === 'ASC'
+        ? number1 - number2
+        : number2 - number1;
+    });
+    console.log(sortedPlanets);
+
+    setFilterPlanets([...sortedPlanets]);
+  }
+
+  function handleChangeSort({ target: { name, value } }) {
+    setSort({
+      ...sort,
+      [name]: value,
+    });
+  }
 
   function handleChange({ target: { name, value } }) {
     setFilters({
@@ -90,7 +113,10 @@ function FilterProvider({ children }) {
     listFilters,
     deleteFilter,
     deletAllFilters,
-  }), [search, filteredPlanets, filters, selectFilters, listFilters]);
+    handleChangeSort,
+    sort,
+    sortPlanets,
+  }), [search, filteredPlanets, filters, selectFilters, listFilters, sort]);
 
   return (
     <FilterContext.Provider value={ values }>
